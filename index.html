@@ -66,10 +66,9 @@
 
             time = forcast.$ / 60 + ":00"
 
-            p = createNode('p');
-            p.innerHTML = "<p> At " + time + " it " + rain + " rain. <strong>" + emoticon + "</strong></p>"
-            append(h2, p);
-            append(willitrain, h2);
+            span = createNode('span');
+            span.innerHTML = "<h2> "+ map.value + "</h2><p> At " + time + " it " + rain + " rain. <strong>" + emoticon + "</strong></p>"
+            append(willitrain, span);
 
           })
 
