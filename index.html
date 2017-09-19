@@ -42,6 +42,7 @@
           //console.log ("first") gets forcast for today
 
           h2 = createNode('h2');
+          h3 = createNode('h3');
 
           //var cut1 = data.SiteRep.DV.Location.name.substring(0, 1);
           //var cut2 = data.SiteRep.DV.Location.name.substring(1);
@@ -67,7 +68,8 @@
 
             span = createNode('span');
             span.innerHTML = "<p> At " + time + " it " + rain + " rain. <strong>" + emoticon + "</strong></p>"
-            append(h2, span);
+            append(h3, span);
+            append(h2, h3);
             append(willitrain, h2);
 
           })
