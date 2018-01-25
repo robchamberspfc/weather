@@ -2,13 +2,12 @@
   <head></head>
 
   <body>
-    <div id="todaysforcast"><h1>Munich</h1></div>
-    <div id="willitrain"><!--<h2>Will it rain today?</h2>--></div>
+    <div id="todaysforcast"></div>
+    <div id="willitrain"><h2>Will it rain today?</h2></div>
   </body>
 
   <script>
-
-    var place = "10865"
+    var place = "350294"
     var key = "7449947d-cea1-41d7-83b7-0ee6f333c87d"
     var url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + place + "?res=3hourly&key=" + key
     var today = new Date();
@@ -19,41 +18,29 @@
       month = tempmonth
     }
     var today = today.getFullYear() + '-' + month + '-' + today.getDate() + "Z";
-
     const todaysforcast = document.getElementById('todaysforcast');
     const willitrain = document.getElementById('willitrain');
-
     function createNode(element) {
       return document.createElement(element); // Create the type of element you pass in the parameters
     }
-
     function append(parent, el) {
       return parent.appendChild(el); // Append the second parameter(element) to the first one
     }
-
     //console.log(today)
-
     fetch(url, {mode: 'cors'}).then(data => data.json()).then(function (data) {
       // console.log(data)
-
       return data.SiteRep.DV.Location.Period.map(function (map) {
         //console.log(map.value)
-        //if (map.value == today) {
+        if (map.value == today) {
           //console.log ("first") gets forcast for today
-
-          h2 = createNode('h2');
-          h3 = createNode('h3');
-
-          //var cut1 = data.SiteRep.DV.Location.name.substring(0, 1);
-          //var cut2 = data.SiteRep.DV.Location.name.substring(1);
-          //var lower = cut2.toLowerCase()
-          //var result = cut1 + lower
-          
-          h2.innerHTML = map.value
+          h1 = createNode('h1');
+          var cut1 = data.SiteRep.DV.Location.name.substring(0, 1);
+          var cut2 = data.SiteRep.DV.Location.name.substring(1);
+          var lower = cut2.toLowerCase()
+          var result = cut1 + lower
           //console.log (result)
-          //h1.innerHTML = "At home in " + result
-          //append(todaysforcast, h2);
-
+          h1.innerHTML = "At home in " + result
+          append(todaysforcast, h1);
           return map.Rep.map(function (forcast) {
             // console.log (parseInt(forcast.Pp))
             if (parseInt(forcast.Pp) < 30) {
@@ -63,17 +50,12 @@
               rain = "will"
               emoticon = "&#9785;"
             }
-
             time = forcast.$ / 60 + ":00"
-
             span = createNode('span');
             span.innerHTML = "<p> At " + time + " it " + rain + " rain. <strong>" + emoticon + "</strong></p>"
-            append(h2, span);
-            append(willitrain, h2);
-
+            append(willitrain, span);
           })
-
-       // };
+        };
       });
     });
   </script>
