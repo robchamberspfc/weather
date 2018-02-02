@@ -6,20 +6,47 @@
   <body>
     <div id="todaysforcast"></div>
     <div id="willitrain"><h2>Will it rain sometime today?</h2></div>
+    <br>
+    <hr>
+    <h3>Places</h3>
+    <p>Add the code shown next to each place below after a '?' in the URL. Or click the link</p>
+    <p><a href = "/?350294" >Bedminster (350294)</a></p>
+    <p><a href = "/?310004" >Bristol (310004)</a></p>
+    <p><a href = "/?351021" >Cosham (351021)</a></p>
+    <p><a href = "/?310122" >Portsmouth (310122)</a></p>
+    <p>For additional IDs, look up in <a href = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist?key=7449947d-cea1-41d7-83b7-0ee6f333c87d">All the places (JSON)</a></p>
+    <hr>
+    <p>Will not rain is defined as less than a 20% chance</p>
   </body>
 
   <script>
-    var place = "350294"
-    var key = "7449947d-cea1-41d7-83b7-0ee6f333c87d"
-    var url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + place + "?res=3hourly&key=" + key
-    var today = new Date();
-    var tempmonth = today.getMonth() + 1
+
+    let place = window.location.href 
+    place = place.split('?')[1]
+    // let place = "350294"
+    const key = "7449947d-cea1-41d7-83b7-0ee6f333c87d"
+    const url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + place + "?res=3hourly&key=" + key
+    let today = new Date();
+    console.log(today)
+    let tempmonth = today.getMonth() + 1
     if (tempmonth < 10) {
       month = "0" + tempmonth
     } else {
       month = tempmonth
     }
-    var today = today.getFullYear() + '-' + month + '-' + today.getDate() + "Z";
+
+    if (today.getDate() < 10) {
+      day = "0" + today.getDate()
+    } else {
+      day = today.getDate()
+    }
+
+    year = today.getFullYear()
+
+
+    // console.log(today.getDate())
+    today = year + '-' + month + '-' + day + "Z";
+    // today = "2018-02-02Z"
     const todaysforcast = document.getElementById('todaysforcast');
     const willitrain = document.getElementById('willitrain');
     function createNode(element) {
@@ -28,33 +55,33 @@
     function append(parent, el) {
       return parent.appendChild(el); // Append the second parameter(element) to the first one
     }
-    //console.log(today)
+    // console.log(today)
     fetch(url, {mode: 'cors'}).then(data => data.json()).then(function (data) {
-      // console.log(data)
+      //  console.log(data)
       return data.SiteRep.DV.Location.Period.map(function (map) {
-        //console.log(map.value)
+        // console.log(map.value)
         if (map.value == today) {
-          //console.log ("first") gets forcast for today
+          // console.log ("first") //gets forcast for today
           h1 = createNode('h1');
-          var cut1 = data.SiteRep.DV.Location.name.substring(0, 1);
-          var cut2 = data.SiteRep.DV.Location.name.substring(1);
-          var lower = cut2.toLowerCase()
-          var result = cut1 + lower
+          let cut1 = data.SiteRep.DV.Location.name.substring(0, 1);
+          let cut2 = data.SiteRep.DV.Location.name.substring(1);
+          let lower = cut2.toLowerCase()
+          let result = cut1 + lower
           //console.log (result)
-          h1.innerHTML = "At home in " + result
+          h1.innerHTML = "Todays forcast for " + result + "<small> (" + day + "/" + month + "/" + year + ")</small>"
           append(todaysforcast, h1);
           return map.Rep.map(function (forcast) {
             // console.log (parseInt(forcast.Pp))
-            if (parseInt(forcast.Pp) < 30) {
+            if (parseInt(forcast.Pp) < 20) {
               rain = "will not"
-              emoticon = "&#9786;"
+              emoticon = "😁"
             } else {
-              rain = "will"
-              emoticon = "&#9785;"
+              rain = "will probably"
+              emoticon = "😞"
             }
             time = forcast.$ / 60 + ":00"
             span = createNode('span');
-            span.innerHTML = "<p> At " + time + " it " + rain + " rain. <strong>" + emoticon + "</strong></p>"
+            span.innerHTML = "<p> At " + time + " it <strong>" + rain + "</strong> rain. " + emoticon + "</p>"
             append(willitrain, span);
           })
         };
