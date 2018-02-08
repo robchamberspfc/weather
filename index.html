@@ -46,7 +46,6 @@
   const key = "7449947d-cea1-41d7-83b7-0ee6f333c87d"
   const url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + place + "?res=3hourly&key=" + key
   let today = new Date();
-  //console.log(today)
   let tempmonth = today.getMonth() + 1
   if (tempmonth < 10) {
     month = "0" + tempmonth
@@ -59,31 +58,21 @@
     day = today.getDate()
   }
   year = today.getFullYear()
-  // console.log(today.getDate())
   today = year + '-' + month + '-' + day + "Z";
-  // today = "2018-02-02Z"
   const todaysforcast = document.getElementById('todaysforcast');
   const willitrain = document.getElementById('willitrain');
-  // console.log(today)
   fetch(url, {
     mode: 'cors'
   }).then(data => data.json()).then(function (data) {
-    //  console.log(data)
     return data.SiteRep.DV.Location.Period.map(function (map) {
-      // console.log(map.value)
       if (map.value == today) {
-        // console.log ("first") //gets forcast for today
         h1 = createNode('h1');
         let cut1 = data.SiteRep.DV.Location.name.substring(0, 1);
         let cut2 = data.SiteRep.DV.Location.name.substring(1);
         let lower = cut2.toLowerCase()
-        let result = cut1 + lower
-        //console.log (result)
-        h1.innerHTML = "Todays forcast for " + result + "<small> (" + day + "/" + month + "/" + year +
-          ")</small>"
+        h1.innerHTML = "Todays forcast for " + result + "<small> (" + day + "/" + month + "/" + year + ")</small>"
         append(todaysforcast, h1);
         return map.Rep.map(function (forcast) {
-          //console.log (parseInt(forcast.Pp))
           if (parseInt(forcast.Pp) < 20) {
             rain = "will not"
             emoticon = "😁"
