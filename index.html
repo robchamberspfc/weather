@@ -74,21 +74,23 @@
         h1.innerHTML = "Todays forcast for " + result + "<small> (" + day + "/" + month + "/" + year + ")</small>"
         append(todaysforcast, h1);
         return map.Rep.map(function (forcast) {
+          console.log(forcast.Pp)
           if (parseInt(forcast.Pp) < 20) {
             rain = "will not"
             emoticon = "😁"
-          } 
+          } else {
           if (parseInt(forcast.Pp) > 80) {
             rain = "will definitely"
             emoticon = "😞"
-          }   
+          }  
           else {
             rain = "will probably"
             emoticon = "😞"
           }
+          }
           time = forcast.$ / 60 + ":00"
           span = createNode('span');
-          span.innerHTML = "<p> At " + time + " it <strong>" + rain + "</strong> rain. " + emoticon +
+          span.innerHTML = "<p> At " + time + " it <strong>" + rain + "</strong> rain. (" + forcast.Pp + "% chance) " + emoticon +
             "</p>"
           append(willitrain, span);
         })
