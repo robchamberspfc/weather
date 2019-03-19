@@ -71,7 +71,7 @@
         let cut2 = data.SiteRep.DV.Location.name.substring(1);
         let lower = cut2.toLowerCase()
         let result = cut1 + lower
-        h1.innerHTML = "Todays forcast for " + result + "<small> (" + day + "/" + month + "/" + year + ")</small>"
+        h1.innerHTML = "Todays forecast for " + result + "<small> (" + day + "/" + month + "/" + year + ")</small>"
         append(todaysforcast, h1);
         return map.Rep.map(function (forcast) {
           console.log(forcast.Pp)
