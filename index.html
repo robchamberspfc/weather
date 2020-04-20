@@ -5,8 +5,8 @@
 </head>
 
 <body>
-  <div id="todaysforcast"></div>
-  <div id="willitrain">
+  <div id="todaysForecast"></div>
+  <div id="willItRain">
     <h2>Will it rain sometime today?</h2>
   </div>
   <br>
@@ -43,14 +43,17 @@
   // let place = "350294"
   let place = window.location.href
   place = place.split('?')[1]
+  if (place == null) {
+    place = 350294
+  }
   const key = "7449947d-cea1-41d7-83b7-0ee6f333c87d"
   const url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + place + "?res=3hourly&key=" + key
   let today = new Date();
-  let tempmonth = today.getMonth() + 1
-  if (tempmonth < 10) {
-    month = "0" + tempmonth
+  let tempMonth = today.getMonth() + 1
+  if (tempMonth < 10) {
+    month = "0" + tempMonth
   } else {
-    month = tempmonth
+    month = tempMonth
   }
   if (today.getDate() < 10) {
     day = "0" + today.getDate()
@@ -59,8 +62,8 @@
   }
   year = today.getFullYear()
   today = year + '-' + month + '-' + day + "Z";
-  const todaysforcast = document.getElementById('todaysforcast');
-  const willitrain = document.getElementById('willitrain');
+  const todaysForecast = document.getElementById('todaysForecast');
+  const willItRain = document.getElementById('willItRain');
   fetch(url, {
     mode: 'cors'
   }).then(data => data.json()).then(function (data) {
@@ -72,9 +75,8 @@
         let lower = cut2.toLowerCase()
         let result = cut1 + lower
         h1.innerHTML = "Todays forcast for " + result + "<small> (" + day + "/" + month + "/" + year + ")</small>"
-        append(todaysforcast, h1);
+        append(todaysForecast, h1);
         return map.Rep.map(function (forcast) {
-          console.log(forcast.Pp)
           if (parseInt(forcast.Pp) < 20) {
             rain = "will not"
             emoticon = "😁"
@@ -91,8 +93,8 @@
           time = forcast.$ / 60 + ":00"
           span = createNode('span');
           span.innerHTML = "<p> At " + time + " it <strong>" + rain + "</strong> rain. (" + forcast.Pp + "% chance) " + emoticon +
-            "</p>"
-          append(willitrain, span);
+            "<br>Temperature:"+ forcast.T+"°C</p>"
+          append(willItRain, span);
         })
       };
     });
